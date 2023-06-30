@@ -50,6 +50,7 @@ build = {
     platforms = {
         unix = getcmd "linux",
         macosx = getcmd "mac",
-        win32 = getcmd "win32"
+        win32 = getcmd "win32",
+        mingw32 = getcmd "win32"
     }
 }

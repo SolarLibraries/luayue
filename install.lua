@@ -407,7 +407,8 @@ local env = {}
 
 for i = 3, #arg do
     local k, v = arg[i]:match("(.+)=(.+)")
-    env[k] = v
+
+    if k and v then env[k] = v end
 end
 
 ---Cross platform GET
@@ -468,11 +469,22 @@ local function unzip(file, to)
     local tar = env.TAR
     if not tar then tar = "tar" end
 
-    local cmd = tar.." -xf "..file.." -C "..to
+    local cmd = tar.." -xzvf "..file.." -C "..to
     print("$ "..cmd)
     local ok = os.execute(cmd)
 
-    if not ok then return false, "tar failed", cmd end
+    if not ok then
+        print("Tar failed, trying unzip")
+
+        local unzip = env.UNZIP or "unzip"
+        cmd = unzip.." "..file.." -d "..to
+        print("$ "..cmd)
+        ok = os.execute(cmd)
+
+        if not ok then
+            return false, "Tar and unzip failed extracting file "..file, cmd
+        end
+    end
 
     return true
 end

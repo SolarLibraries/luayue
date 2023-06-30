@@ -1,5 +1,5 @@
 package = "luayue-bin"
-version = "0.13.13-1"
+version = "0.13.13-2"
 source = {
    url = "git+https://github.com/Frityet/luayue",
    branch = "main"
