@@ -1,8 +1,8 @@
 package = "luayue"
 version = "dev-1"
 source = {
-    url = "git://github.com/Frityet/luayue",
-    branch = "master"
+    url = "git+https://github.com/Frityet/luayue",
+    branch = "main"
 }
 description = {
     homepage = "https://github.com/yue/yue",
