@@ -86,7 +86,7 @@ elseif action == "install" then
 
     --copy yue/yue.so to the install dir
     local yue_so = "yue.so"
-    local yue_so_dest = env.INST_LUADIR.."/yue.so"
+    local yue_so_dest = env.INST_LIBDIR.."/yue.so"
 
     print("Copying "..yue_so.." to "..yue_so_dest)
     local ok, err = os.rename(yue_so, yue_so_dest)
