@@ -1,3 +1,5 @@
+--#region json.lua
+
 --
 -- json.lua
 --
@@ -383,6 +385,10 @@ function json.decode(str)
   end
   return res
 end
+
+--#endregion
+
+--[=[ Script start ]=]
 
 ---@type "build" | "install"
 local action = arg[1]
