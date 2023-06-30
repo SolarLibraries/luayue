@@ -477,7 +477,7 @@ local function unzip(file, to)
         print("Tar failed, trying unzip")
 
         local unzip = env.UNZIP or "unzip"
-        cmd = unzip.." "..file.." -d "..to
+        cmd = unzip.." "..file.." -d -o "..to
         print("$ "..cmd)
         ok = os.execute(cmd)
 

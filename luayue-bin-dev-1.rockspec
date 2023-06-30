@@ -16,21 +16,13 @@ dependencies = {
 }
 
 local env = {
-    "CFLAGS=$(CFLAGS)",
-    "LIBFLAG=$(LIBFLAG)",
-    "LUA_LIBDIR=$(LUA_LIBDIR)",
-    "LUA_BINDIR=$(LUA_BINDIR)",
-    "LUA_INCDIR=$(LUA_INCDIR)",
     "LUA=$(LUA)",
     "CURL=$(CURL)",
     "YUE_VERSION=latest",
-    "INST_PREFIX=$(PREFIX)",
-    "INST_BINDIR=$(BINDIR)",
     "INST_LIBDIR=$(LIBDIR)",
-    "INST_LUADIR=$(LUADIR)",
-    "INST_CONFDIR=$(CONFDIR)",
     "WGET=$(WGET)",
     "TAR=$(TAR)",
+    "UNZIP=$(UNZIP)",
 }
 
 local env_str = ""
