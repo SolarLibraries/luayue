@@ -26,7 +26,7 @@ local env = {
 }
 
 local env_str = ""
-for i = 1, #env do env_str = env_str..'"'..env[i]..'" ' end
+for i = 1, #env do env_str = env_str..'"'..(env[i]:gsub("\"", "\\\""))..'" ' end
 
 ---@param plat string
 ---@return { build_command: string, install_command: string }
