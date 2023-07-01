@@ -1,7 +1,7 @@
 local INSTALL_FILE = "install.lua"
 
 package = "luayue-bin"
-version = "dev-1"
+version = "dev-3"
 source = {
     url = "git+https://github.com/Frityet/luayue",
     branch = "main"
@@ -26,14 +26,22 @@ local env = {
 }
 
 local env_str = ""
-for i = 1, #env do env_str = env_str..'"'..(env[i]:gsub("\"", "\\\""))..'" ' end
+for i = 1, #env do env_str = env_str..'"'..env[i]..'" ' end
 
 ---@param plat string
 ---@return { build_command: string, install_command: string }
 local function getcmd(plat)
+    local function decorate(cmd)
+        if plat == "win32" then
+            return "cmd /c \""..cmd.."\""
+        else
+            return cmd
+        end
+    end
+
     return {
-        build_command = "$(LUA) "..INSTALL_FILE.." build "..plat.." "..env_str,
-        install_command = "$(LUA) "..INSTALL_FILE.." install "..plat.." "..env_str
+        build_command   = decorate "'$(LUA)' "..INSTALL_FILE.." build "..plat.." "..env_str,
+        install_command = decorate "'$(LUA)' "..INSTALL_FILE.." install "..plat.." "..env_str
     }
 end
 
