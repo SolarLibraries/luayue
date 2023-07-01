@@ -418,7 +418,7 @@ local function get(url)
 
     local success, errormsg, code = handle:close()
     if not success then return nil, errormsg end
-    if code ~= 0 then return nil, "curl exited with code " .. code end
+    if code and code ~= 0 then return nil, "curl exited with code " .. code end
     return body
 end
 
