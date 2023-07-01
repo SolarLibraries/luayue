@@ -16,7 +16,6 @@ dependencies = {
 }
 
 local env = {
-    "LUA=$(LUA)",
     "CURL=$(CURL)",
     "YUE_VERSION=latest",
     "INST_LIBDIR=$(LIBDIR)",
