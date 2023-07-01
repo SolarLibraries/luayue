@@ -1,7 +1,7 @@
 local INSTALL_FILE = "install.lua"
 
 package = "luayue-bin"
-version = "dev-4"
+version = "dev-5"
 source = {
     url = "git+https://github.com/Frityet/luayue",
     branch = "main"
@@ -32,7 +32,7 @@ for i = 1, #env do env_str = env_str..'"'..env[i]..'" ' end
 ---@return { build_command: string, install_command: string }
 local function getcmd(plat)
     local function decorate(cmd)
-        if plat == "win32" then
+        if plat == "win" then
             return "cmd /c "..cmd
         else
             return cmd
@@ -50,7 +50,7 @@ build = {
     platforms = {
         unix = getcmd "linux",
         macosx = getcmd "mac",
-        win32 = getcmd "win32",
-        mingw32 = getcmd "win32"
+        win32 = getcmd "win",
+        mingw32 = getcmd "win"
     }
 }

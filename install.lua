@@ -393,7 +393,7 @@ end
 ---@type "build" | "install"
 local action = arg[1]
 
----@type "mac" | "linux" | "win32"
+---@type "mac" | "linux" | "win"
 os.name = arg[2]
 
 --TODO: support arm64
@@ -416,7 +416,7 @@ end
 ---@return string? body, string? error, string? command
 local function get(url)
     --Use system `curl.exe` on Windows because its ACTUALLY curl
-    local exe = os.name == "win32" and "C:\\Windows\\System32\\curl.exe" or env.CURL
+    local exe = os.name == "win" and "C:\\Windows\\System32\\curl.exe" or env.CURL
     local is_wget = false
 
     if exe == nil or exe == "" then
