@@ -81,15 +81,15 @@ yue/:
 
 yue/yue.a: yue/
 	@/usr/bin/printf "[\033[1;35mLua-Yue\033[0m] \033[32mMaking \033[33m$@\n\033[0m"
-	$(MAKE) -j -f ../Yue.mk CC="$(CC)" CXX="$(CXX)" CFLAGS="$(C_FLAGS)" CXXFLAGS="$(CXX_FLAGS)" INCDIRS="$(INCLUDES)" OS="$(OS)" -C $<
+	$(MAKE) -f ../Yue.mk CC="$(CC)" CXX="$(CXX)" CFLAGS="$(C_FLAGS)" CXXFLAGS="$(CXX_FLAGS)" INCDIRS="$(INCLUDES)" OS="$(OS)" -C $<
 
 yue-git/lua/lua.a: yue-git/ yue/
 	@/usr/bin/printf "[\033[1;35mLua-Yue\033[0m] \033[32mMaking \033[33m$@\n\033[0m"
-	$(MAKE) -j -f ../../Lua.mk CC="$(CC)" CXX="$(CXX)" CFLAGS="$(C_FLAGS)" CXXFLAGS="$(CXX_FLAGS)" INCDIRS="$(INCLUDES)" OS="$(OS)" -C yue-git/lua/
+	$(MAKE) -f ../../Lua.mk CC="$(CC)" CXX="$(CXX)" CFLAGS="$(C_FLAGS)" CXXFLAGS="$(CXX_FLAGS)" INCDIRS="$(INCLUDES)" OS="$(OS)" -C yue-git/lua/
 
 yue-git/lua_yue/lua_yue.a: yue-git/ yue/
 	@/usr/bin/printf "[\033[1;35mLua-Yue\033[0m] \033[32mMaking \033[33m$@\n\033[0m"
-	$(MAKE) -j -f ../../LuaYue.mk CC="$(CC)" CXX="$(CXX)" CFLAGS="$(C_FLAGS)" CXXFLAGS="$(CXX_FLAGS)" INCDIRS="$(INCLUDES)" OS="$(OS)" -C yue-git/lua_yue/
+	$(MAKE) -f ../../LuaYue.mk CC="$(CC)" CXX="$(CXX)" CFLAGS="$(C_FLAGS)" CXXFLAGS="$(CXX_FLAGS)" INCDIRS="$(INCLUDES)" OS="$(OS)" -C yue-git/lua_yue/
 
 install: $(LIBYUE)
 	cp $(LIBYUE) $(INST_LIBDIR)/$(LIBYUE)
@@ -98,7 +98,7 @@ ifeq ($(OS),darwin)
 #macOS linkers use -all_load
 $(LIBYUE): yue/yue.a yue-git/lua/lua.a yue-git/lua_yue/lua_yue.a
 	@/usr/bin/printf "[\033[1;35mLua-Yue\033[0m] \033[32mLinking \033[33m$@\n\033[0m"
-	$(CXX) $(LD_FLAGS) -o $@ $^
+	$(CXX) -o $@ $^ $(LD_FLAGS)
 
 else ifeq ($(OS),windows)
 
@@ -106,7 +106,7 @@ else
 #linux linkers use --whole-archive
 $(LIBYUE): yue/yue.a yue-git/lua/lua.a yue-git/lua_yue/lua_yue.a
 	@/usr/bin/printf "[\033[1;35mLua-Yue\033[0m] \033[32mLinking \033[33m$@\n\033[0m"
-	$(CXX) $(LD_FLAGS) -Wl,--whole-archive -shared -o $@ $^ -Wl,--no-whole-archive
+	$(CXX) -Wl,--whole-archive -shared -o $@ $^ -Wl,--no-whole-archive $(LD_FLAGS)
 endif
 
 .PHONY: clean

@@ -34,6 +34,6 @@ WORKDIR /module
 COPY . .
 
 RUN luarocks init
-RUN ./luarocks make MAKE="make -j"
+RUN ./luarocks make
 
 CMD [ "lua" ]
