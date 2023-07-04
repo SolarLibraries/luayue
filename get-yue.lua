@@ -369,7 +369,12 @@ parse = function(str, idx)
     decode_error(str, idx, "unexpected character '" .. chr .. "'")
 end
 
+---@alias JSON.Value string | number | boolean | JSON.Array | JSON.Object | nil
+---@class JSON.Array    : { [integer] : JSON.Value }
+---@class JSON.Object   : { [string] : JSON.Value }
 
+---@param str string
+---@return JSON.Object
 function json.decode(str)
     if type(str) ~= "string" then
         error("expected argument of type string, got " .. type(str))
@@ -387,6 +392,11 @@ end
 --[=[ Script start ]=]
 
 local GITHUB_API_URL = "https://api.github.com/repos/yue/yue/releases/"
+
+---@type string? optional, stops ratelimiting
+local GITHUB_API_KEY = os.getenv("GITHUB_API_KEY")
+
+if GITHUB_API_KEY then io.stderr:write(("Using your GITHUB_API_KEY (%s) to avoid ratelimiting\n"):format(GITHUB_API_KEY)) end
 
 ---@type "latest" | string
 local yue_version = arg[1]
@@ -411,24 +421,34 @@ end
 ---@param url string
 ---@return string? body, string? errormsg
 local function get(url)
-    local handle, err = io.popen(curl_path .. " -s -L -H \"Accept: application/vnd.github.v3+json\" " .. url)
-    if not handle then return nil, "failed to open curl: " .. err end
+    local curl_cmd = curl_path.." -fsL -H \"Accept: application/vnd.github.v3+json\""
+
+    if GITHUB_API_KEY then
+        curl_cmd = curl_cmd.."--header \"Authorization: Bearer "..GITHUB_API_KEY.."\""
+    end
+
+    io.stderr:write("$ "..curl_cmd.." "..url.."\n")
+    local handle, err = io.popen(curl_cmd.." "..url)
+    if not handle then return nil, "failed to open curl: "..err end
 
     local body = handle:read("*a")
 
     local success, errormsg, code = handle:close()
     if not success then return nil, errormsg end
-    if code and code ~= 0 then return nil, "curl exited with code " .. code end
+    if code and code ~= 0 then return nil, '{'..curl_cmd.."} exited with code "..code end
     return body
 end
 
 ---@type string
 local tag do
     if yue_version == "latest" then
-        local body = assert(get(GITHUB_API_URL .. "latest"))
-        local json = assert(json.decode(body))
+        local body = assert(get(GITHUB_API_URL.."latest"))
 
-        tag = json.tag_name
+        local resp = assert(json.decode(body))
+
+        if resp.message and not GITHUB_API_KEY then error("Could not GET! (Likley ratelimited)\nMessage: "..json.message) end
+
+        tag = assert(resp.tag_name) --[[@as string]]
         yue_version = tag:match("v(%d+.%d+.%d+)")
     else
         tag = "v" .. yue_version
@@ -437,11 +457,11 @@ end
 
 ---@type string
 local url do
-    local body = assert(get(GITHUB_API_URL .. "tags/" .. tag))
+    local body = assert(get(GITHUB_API_URL.."tags/"..tag))
     local data = assert(json.decode(body))
 
-    for _, asset in ipairs(data.assets) do
-        local asset_url = asset.browser_download_url
+    for _, asset in ipairs(assert(data.assets) --[[@as JSON.Array]]) do
+        local asset_url = assert(asset.browser_download_url) --[[@as string]]
 
         local yue_ver, _, osname =
             asset_url:match("https://github.com/yue/yue/releases/download/v(%d+.%d+.%d+)/libyue_v(%d+.%d+.%d+)_(%w+).zip")

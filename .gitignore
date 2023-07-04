@@ -49,3 +49,5 @@ yue/
 yue-git/
 
 test/
+
+.env
