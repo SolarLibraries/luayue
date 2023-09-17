@@ -1,6 +1,3 @@
-local BUILD_FILE = "build.lua"
-local INSTALL_FILE = "install.lua"
-
 package = "luayue"
 version = "dev-1"
 source = {

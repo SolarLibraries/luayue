@@ -20,15 +20,14 @@ ifeq ($(OS), darwin)
 	DL = $(CURL) -fL
 	UNZIP = unzip -q
 
-#if libflag is not defined (luarocks defines it) then add -bundle -undefined dynamic_lookup
-
-ifneq ($(LIBFLAG),)
-	LD_FLAGS += -bundle -undefined dynamic_lookup
-endif
+	# if libflag is not defined (luarocks defines it) then add -bundle -undefined dynamic_lookup
+	ifneq ($(LIBFLAG),)
+		LD_FLAGS += -bundle -undefined dynamic_lookup
+	endif
 
 	LD_FLAGS += -framework AppKit -framework Carbon -framework IOKit -framework Security -framework WebKit -framework OpenDirectory
 	LD_FLAGS += -llua -lpmenergy -lpmsample
-	C_FLAGS += -DOS_MAC -DSYSTEM_NATIVE_UTF8 -Wno-deprecated-declarations
+	C_FLAGS += -DOS_MAC -DSYSTEM_NATIVE_UTF8 -Wno-deprecated-declarations -fobjc-arc
 	INCLUDES += -I/usr/local/include
 	LD_FLAGS += -L/usr/local/lib
 
