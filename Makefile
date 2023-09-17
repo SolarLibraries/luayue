@@ -62,7 +62,7 @@ endif
 
 ARCH = x64
 GIT = git
-CXX_FLAGS = $(C_FLAGS) -std=gnu++17
+CXX_FLAGS = $(C_FLAGS) -std=gnu++2a
 AR = ar
 
 YUE_VER = $(shell $(LUA) get-yue.lua $(YUE_VERSION) version $(CURL) $(OS))
