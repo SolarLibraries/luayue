@@ -102,6 +102,11 @@ $(LIBYUE): yue/yue.a yue-git/lua/lua.a yue-git/lua_yue/lua_yue.a
 
 else ifeq ($(OS),windows)
 
+#If we are using windows, then just install binaries
+$(LIBYUE):
+	$(LUA) get-yue.lua $(YUE_VERSION) bin-download $(CURL) $(OS) $(LUA_INCDIR) $(LUA_LIBDIR) $(UNZIP)
+	cp yue.dll $(INST_LIBDIR)/yue.dll
+
 else
 #linux linkers use --whole-archive
 $(LIBYUE): yue/yue.a yue-git/lua/lua.a yue-git/lua_yue/lua_yue.a

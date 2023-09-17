@@ -401,7 +401,7 @@ if GITHUB_API_KEY then io.stderr:write(("Using your GITHUB_API_KEY (%s) to avoid
 ---@type "latest" | string
 local yue_version = arg[1]
 
----@type "url"
+---@type "url" | "version" | "bin-download"
 local action = arg[2]
 
 ---@type string
@@ -481,6 +481,23 @@ if action == "url" then
     io.write(url)
 elseif action == "version" then
     io.write(yue_version)
+elseif action == "bin-download" then
+    local tar_path = arg[5] or "tar.exe"
+
+    --download to ./yue.so
+    --example URL https://github.com/yue/yue/releases/download/v0.13.13/lua_yue_lua_5.4_v0.13.13_win_x64.zip
+    local zip_path = "yue.zip"
+    local bin_path = "yue.dll"
+
+    local curl_cmd = curl_path.." -fsL -H \"Accept: application/vnd.github.v3+json\""
+
+    local ok, err = os.execute(curl_cmd.." -o "..zip_path.." "..url)
+    if not ok then error("Failed to download yue.zip: "..err) end
+
+    local ok, err = os.execute(tar_path.." "..zip_path.." -C "..bin_path)
+    if not ok then error("Failed to extract yue.dll: "..err) end
+
+    os.remove(zip_path)
 else
     error("Unknown action: "..action)
 end
