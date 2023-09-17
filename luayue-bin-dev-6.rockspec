@@ -1,7 +1,7 @@
 local INSTALL_FILE = "install.lua"
 
 package = "luayue-bin"
-version = "dev-5"
+version = "dev-6"
 source = {
     url = "git+https://github.com/Frityet/luayue",
     branch = "main"
@@ -39,7 +39,7 @@ local function getcmd(plat)
     end
 
     return {
-        build_command   = decorate "'$(LUA)' "..INSTALL_FILE.." build "..plat.." "..env_str,
+        build_command   = decorate "'$(LUA)' "..INSTALL_FILE.." download "..plat.." "..env_str,
         install_command = decorate "'$(LUA)' "..INSTALL_FILE.." install "..plat.." "..env_str
     }
 end
