@@ -27,6 +27,8 @@ build = {
         LUA = "$(LUA)",
         CURL = "$(CURL)",
         YUE_VERSION = "latest",
+        CC = "$(CC)",
+        CXX = "$(CXX)",
     },
     install_variables = {
         INST_PREFIX = "$(PREFIX)",
