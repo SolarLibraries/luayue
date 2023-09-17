@@ -503,7 +503,7 @@ local yue_zip = "yue.zip"
 
 print(action.."ing Yue "..env.YUE_VERSION.." for ".._VERSION.." on "..os.name)
 if action == "download" then
-    local tag = "v"..env.YUE_VERSION
+    local tag = env.YUE_VERSION
     if env.YUE_VERSION == "latest" then
         local body, err, cmd = get("https://api.github.com/repos/yue/yue/releases/latest", {
             ["Accept"] = "application/vnd.github+json",
