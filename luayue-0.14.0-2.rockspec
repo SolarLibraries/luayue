@@ -1,10 +1,9 @@
-local YUE_VERSION = "0.14.0"
 package = "luayue"
-version = YUE_VERSION.."-1"
+version = "0.14.0-2"
 source = {
    url = "git+https://github.com/SolarLibraries/luayue",
-   branch = "compile",
-   tag = "v"..YUE_VERSION
+   tag = "v0.14.0-2",
+   branch = "compile"
 }
 description = {
    detailed = "A library for creating native cross-platform GUI apps",
@@ -26,7 +25,7 @@ build = {
       LUA_BINDIR = "$(LUA_BINDIR)",
       LUA_INCDIR = "$(LUA_INCDIR)",
       LUA_LIBDIR = "$(LUA_LIBDIR)",
-      YUE_VERSION = YUE_VERSION
+      YUE_VERSION = "0.14.0"
    },
    install_variables = {
       INST_BINDIR = "$(BINDIR)",
