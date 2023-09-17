@@ -1,6 +1,6 @@
-INCLUDES += -I$(INCDIRS)\
-			-I../../yue/include/\
-			-I../
+INCLUDES += -I../../yue/include/\
+			-I../\
+			$(INCDIRS)
 
 ifeq ($(OS),darwin)
 	include ../../mac/Lua.mk

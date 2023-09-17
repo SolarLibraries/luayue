@@ -11,7 +11,7 @@ container:addchildview(gui.Label.create "0")
 local inc = gui.Button.create "Increment"
 function inc:onclick()
     i = i + 1
-    local child = container:childat(2) --[[@as Label]]
+    local child = container:childat(2) --[[@as nu.Label]]
     child:settext(tostring(i))
 end
 container:addchildview(inc)

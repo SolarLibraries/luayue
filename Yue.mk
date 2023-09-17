@@ -1,5 +1,5 @@
-INCLUDES = 	-I$(INCDIRS)\
-			-Iinclude/
+INCLUDES = 	-Iinclude/\
+			$(INCDIRS)
 
 ifeq ($(OS),darwin)
 	include ../mac/Yue.mk

@@ -424,7 +424,7 @@ local function get(url)
     local curl_cmd = curl_path.." -fsL -H \"Accept: application/vnd.github.v3+json\""
 
     if GITHUB_API_KEY then
-        curl_cmd = curl_cmd.."--header \"Authorization: Bearer "..GITHUB_API_KEY.."\""
+        curl_cmd = curl_cmd.." -H \"Authorization: Bearer "..GITHUB_API_KEY.."\""
     end
 
     io.stderr:write("$ "..curl_cmd.." "..url.."\n")
@@ -489,7 +489,7 @@ elseif action == "bin-download" then
 
     local curl_cmd = curl_path.." -fsL "
     if GITHUB_API_KEY then
-        curl_cmd = curl_cmd.."--header \"Authorization: Bearer "..GITHUB_API_KEY.."\""
+        curl_cmd = curl_cmd.." -H \"Authorization: Bearer "..GITHUB_API_KEY.."\""
     end
 
 

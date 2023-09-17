@@ -28,7 +28,7 @@ endif
 
 	LD_FLAGS += -framework AppKit -framework Carbon -framework IOKit -framework Security -framework WebKit -framework OpenDirectory
 	LD_FLAGS += -llua -lpmenergy -lpmsample
-	C_FLAGS += -DOS_MAC -DSYSTEM_NATIVE_UTF8 -Wno-deprecated-declarations
+	C_FLAGS += -DOS_MAC -DSYSTEM_NATIVE_UTF8 -Wno-deprecated-declarations -U__weak -D__weak=__unsafe_unretained
 	INCLUDES += -I/usr/local/include
 	LD_FLAGS += -L/usr/local/lib
 
