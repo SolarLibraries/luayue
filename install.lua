@@ -526,8 +526,8 @@ if action == "download" then
     })
     if not body then error(err.."\nCommand: "..cmd) end
 
-    local data = json.decode(body)
-    if not data then error("Failed to decode JSON") end
+    local data = assert(json.decode(body))
+    if data.message then error("Failed to GET: "..data.message) end
 
     local assets = data.assets
 
