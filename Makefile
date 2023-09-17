@@ -20,7 +20,7 @@ ifeq ($(OS), darwin)
 	DL = $(CURL) -fL
 	UNZIP = unzip -q
 
-	# if libflag is not defined (luarocks defines it) then add -bundle -undefined dynamic_lookup
+# if libflag is not defined (luarocks defines it) then add -bundle -undefined dynamic_lookup
 	ifneq ($(LIBFLAG),)
 		LD_FLAGS += -bundle -undefined dynamic_lookup
 	endif
@@ -53,7 +53,7 @@ else
 	C_FLAGS += -DUSE_GLIB -fdata-sections -ffunction-sections -Wno-deprecated-declarations
 
 	C_FLAGS	+= -D_GNU_SOURCE -DOS_LINUX -DSYSTEM_NATIVE_UTF8
-  	# LD_FLAGS cl+= -Wl,--as-needed,--gc-section
+# LD_FLAGS cl+= -Wl,--as-needed,--gc-section
 	INCLUDES += -I/usr/include -I/usr/local/include
 
 	LIBYUE = yue.so
