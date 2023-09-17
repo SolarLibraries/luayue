@@ -498,6 +498,23 @@ local function unzip(file, to)
     return true
 end
 
+---@param from string
+---@param to string
+---@return boolean ok, string? err
+local function copy(from, to)
+    local from_f, err = io.open(from, "rb")
+    if not from_f then return false, err end
+    local to_f, err = io.open(to, "w+b")
+    if not to_f then return false, err end
+
+    local from_contents, err = from_f:read("a")
+    if not from_contents then return false, err end
+
+    local ok, err = to_f:write(from_contents)
+    if not ok then return false, err end
+
+    return true
+end
 
 local yue_zip = "yue.zip"
 
@@ -568,8 +585,15 @@ elseif action == "install" then
     local yue_so_dest = env.INST_LIBDIR.."/yue.so"
 
     print("Copying "..yue_so.." to "..yue_so_dest)
-    local ok, err = os.rename(yue_so, yue_so_dest)
-    if not ok then error(err) end
+
+    ---@type boolean?, string?
+    local ok, err = copy(yue_so, yue_so_dest)
+    if not ok then
+        io.stderr:write(("Could not copy with `os.rename` (reason: %s), using `cp`"):format(err))
+
+        ok, err = os.execute("cp "..yue_so..' '..yue_so_dest)
+        if not ok then error(err) end
+    end
 else
     error("Unknown action: "..action)
 end
