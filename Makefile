@@ -28,7 +28,7 @@ endif
 
 	LD_FLAGS += -framework AppKit -framework Carbon -framework IOKit -framework Security -framework WebKit -framework OpenDirectory
 	LD_FLAGS += -llua -lpmenergy -lpmsample
-	C_FLAGS += -DOS_MAC -DSYSTEM_NATIVE_UTF8 -Wno-deprecated-declarations -fobjc-arc
+	C_FLAGS += -DOS_MAC -DSYSTEM_NATIVE_UTF8 -Wno-deprecated-declarations
 	INCLUDES += -I/usr/local/include
 	LD_FLAGS += -L/usr/local/lib
 
@@ -65,8 +65,8 @@ GIT = git
 CXX_FLAGS = $(C_FLAGS) -std=gnu++2a
 AR = ar
 
-YUE_VER = $(shell $(LUA) get-yue.lua $(YUE_VERSION) version $(CURL) $(OS))
-YUE_SRC_ARCHIVE_URL = $(shell $(LUA) get-yue.lua $(YUE_VER) url $(CURL) $(OS))
+YUE_VER = $(shell $(LUA) install.lua $(YUE_VERSION) version $(CURL) $(OS))
+YUE_SRC_ARCHIVE_URL = $(shell $(LUA) install.lua $(YUE_VER) url $(CURL) $(OS))
 
 .PHONY: all build install
 all: $(LIBYUE)
@@ -104,7 +104,7 @@ else ifeq ($(OS),windows)
 
 #If we are using windows, then just install binaries
 $(LIBYUE):
-	$(LUA) get-yue.lua $(YUE_VERSION) bin-download $(CURL) $(OS) $(LUA_INCDIR) $(LUA_LIBDIR) $(UNZIP)
+	$(LUA) install.lua $(YUE_VERSION) bin-download $(CURL) $(OS) $(LUA_INCDIR) $(LUA_LIBDIR) $(UNZIP)
 	cp yue.dll $(INST_LIBDIR)/yue.dll
 
 else

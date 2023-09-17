@@ -484,12 +484,14 @@ elseif action == "version" then
 elseif action == "bin-download" then
     local tar_path = arg[5] or "tar.exe"
 
-    --download to ./yue.so
-    --example URL https://github.com/yue/yue/releases/download/v0.13.13/lua_yue_lua_5.4_v0.13.13_win_x64.zip
     local zip_path = "yue.zip"
     local bin_path = "yue.dll"
 
-    local curl_cmd = curl_path.." -fsL -H \"Accept: application/vnd.github.v3+json\""
+    local curl_cmd = curl_path.." -fsL "
+    if GITHUB_API_KEY then
+        curl_cmd = curl_cmd.."--header \"Authorization: Bearer "..GITHUB_API_KEY.."\""
+    end
+
 
     local ok, err = os.execute(curl_cmd.." -o "..zip_path.." "..url)
     if not ok then error("Failed to download yue.zip: "..err) end
