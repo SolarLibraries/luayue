@@ -1,5 +1,5 @@
-print("PATH: "..package.path)
-print("CPATH: "..package.cpath)
+print("PATH: " .. package.path)
+print("CPATH: " .. package.cpath)
 
 local gui = require("yue.gui")
 
@@ -17,6 +17,7 @@ function inc:onclick()
     local child = container:childat(2) --[[@as nu.Label]]
     child:settext(tostring(i))
 end
+
 container:addchildview(inc)
 
 win:setcontentview(container)

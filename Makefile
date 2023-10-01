@@ -65,15 +65,15 @@ GIT = git
 CXX_FLAGS = $(C_FLAGS) -std=gnu++2a
 AR = ar
 
-YUE_VER = $(shell $(LUA) install.lua $(YUE_VERSION) version $(CURL) $(OS))
-YUE_SRC_ARCHIVE_URL = $(shell $(LUA) install.lua $(YUE_VER) url $(CURL) $(OS))
+YUE_TAG = $(shell $(LUA) utility.lua version "YUE_VERSION=$(YUE_VERSION)" "DL=$(CURL)" "OS=$(OS)")
+YUE_SRC_ARCHIVE_URL = $(shell $(LUA) utility.lua url "YUE_VERSION=$(YUE_VERSION)" "DL=$(CURL)" "OS=$(OS)")
 
 .PHONY: all build install
 all: $(LIBYUE)
 build: yue/ $(LIBYUE)
 
 yue-git/:
-	$(GIT) clone https://github.com/yue/yue.git --recursive --branch v$(YUE_VER) $@
+	$(GIT) clone https://github.com/yue/yue.git --recursive --branch $(YUE_TAG) $@
 
 yue/:
 	$(DL) $(YUE_SRC_ARCHIVE_URL) -o yue.zip
@@ -91,6 +91,12 @@ yue-git/lua_yue/lua_yue.a: yue-git/ yue/
 	@/usr/bin/printf "[\033[1;35mLua-Yue\033[0m] \033[32mMaking \033[33m$@\n\033[0m"
 	$(MAKE) -f ../../LuaYue.mk CC="$(CC)" CXX="$(CXX)" CFLAGS="$(C_FLAGS)" CXXFLAGS="$(CXX_FLAGS)" INCDIRS="$(INCLUDES)" OS="$(OS)" -C yue-git/lua_yue/
 
+download-bin:
+	$(LUA) utility.lua download "YUE_VERSION=$(YUE_VERSION)" "OS=$(OS)" "UNZIP=$(UNZIP)"
+
+install-bin: download-bin
+	cp $(LIBYUE) $(INST_LIBDIR)/$(LIBYUE)
+
 install: $(LIBYUE)
 	cp $(LIBYUE) $(INST_LIBDIR)/$(LIBYUE)
 
@@ -103,9 +109,9 @@ $(LIBYUE): yue/yue.a yue-git/lua/lua.a yue-git/lua_yue/lua_yue.a
 else ifeq ($(OS),windows)
 
 #If we are using windows, then just install binaries
-$(LIBYUE):
-	$(LUA) install.lua $(YUE_VERSION) bin-download $(CURL) $(OS) $(LUA_INCDIR) $(LUA_LIBDIR) $(UNZIP)
-	cp yue.dll $(INST_LIBDIR)/yue.dll
+# $(LIBYUE):
+# 	$(LUA) install.lua $(YUE_VERSION) bin-download $(CURL) $(OS) $(LUA_INCDIR) $(LUA_LIBDIR) $(UNZIP)
+# 	cp yue.dll $(INST_LIBDIR)/yue.dll
 
 else
 #linux linkers use --whole-archive

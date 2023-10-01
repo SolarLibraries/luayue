@@ -1,8 +1,8 @@
 package = "luayue"
-version = "0.14.0-3"
+version = "0.14.1-2"
 source = {
    url = "git+https://github.com/SolarLibraries/luayue",
-   tag = "v0.14.0-3",
+   tag = "v0.14.1",
    branch = "compile"
 }
 description = {
@@ -25,7 +25,7 @@ build = {
       LUA_BINDIR = "$(LUA_BINDIR)",
       LUA_INCDIR = "$(LUA_INCDIR)",
       LUA_LIBDIR = "$(LUA_LIBDIR)",
-      YUE_VERSION = "0.14.0"
+      YUE_VERSION = "0.14.1"
    },
    install_variables = {
       INST_BINDIR = "$(BINDIR)",

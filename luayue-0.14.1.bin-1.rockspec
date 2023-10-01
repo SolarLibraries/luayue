@@ -1,13 +1,13 @@
-local YUE_VERSION = "0.14.0"
+local YUE_VERSION = "0.14.1"
 package = "luayue"
-version = YUE_VERSION.."-1"
+version = YUE_VERSION..".bin-1"
 source = {
-   url = "git+https://github.com/SolarLibraries/luayue",
+   url = "git+https://github.com/Frityet/luayue",
    branch = "compile",
-   tag = "v"..YUE_VERSION
+   tag = "v"..YUE_VERSION.."-bin"
 }
 description = {
-   detailed = "A library for creating native cross-platform GUI apps",
+   detailed = "Binary releases for yue",
    homepage = "https://github.com/yue/yue",
    license = "LGPLv3"
 }
@@ -35,5 +35,8 @@ build = {
       INST_LUADIR = "$(LUADIR)",
       INST_PREFIX = "$(PREFIX)"
    },
-   makefile = "Makefile"
+   makefile = "Makefile",
+
+   build_target = "download-bin",
+   install_target = "install-bin"
 }
