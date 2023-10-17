@@ -94,7 +94,7 @@ yue-git/lua_yue/lua_yue.a: yue-git/ yue/
 download-bin:
 	$(LUA) utility.lua download "YUE_VERSION=$(YUE_VERSION)" "OS=$(OS)" "UNZIP=$(UNZIP)"
 
-install-bin: download-bin
+install-bin:
 	cp $(LIBYUE) $(INST_LIBDIR)/$(LIBYUE)
 
 install: $(LIBYUE)
