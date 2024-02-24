@@ -53,8 +53,12 @@ else
 	UNZIP = unzip -q
 
 	LD_FLAGS += -L/usr/lib -L/usr/local/lib -L/usr/lib/x86_64-linux-gnu -L/usr/local/lib/x86_64-linux-gnu
-  	LD_FLAGS += -lpthread -ldl -latomic $(shell pkg-config --libs fontconfig pangoft2 gtk+-3.0 gdk-3.0 glib-2.0 webkit2gtk-4.0 )
+  	LD_FLAGS += -lpthread -ldl -latomic $(shell pkg-config --libs fontconfig pangoft2 gtk+-3.0 gdk-3.0 glib-2.0 webkit2gtk-4.1)
+  	LD_FLAGS += -lpthread -ldl -latomic $(shell pkg-config --libs fontconfig pangoft2 gtk+-3.0 gdk-3.0 glib-2.0 webkit2gtk-4.0)
+  	LD_FLAGS += -lpthread -ldl -latomic $(shell pkg-config --libs fontconfig pangoft2 gtk+-3.0 gdk-3.0 glib-2.0 webkit2gtk)
+  	C_FLAGS += $(shell pkg-config --cflags fontconfig pangoft2 gtk+-3.0 gdk-3.0 glib-2.0 webkit2gtk-4.1)
   	C_FLAGS += $(shell pkg-config --cflags fontconfig pangoft2 gtk+-3.0 gdk-3.0 glib-2.0 webkit2gtk-4.0)
+  	C_FLAGS += $(shell pkg-config --cflags fontconfig pangoft2 gtk+-3.0 gdk-3.0 glib-2.0 webkit2gtk)
 	C_FLAGS += -DUSE_GLIB -fdata-sections -ffunction-sections -Wno-deprecated-declarations
 
 	C_FLAGS	+= -D_GNU_SOURCE -DOS_LINUX -DSYSTEM_NATIVE_UTF8
@@ -66,7 +70,7 @@ endif
 
 ARCH = x64
 GIT = git
-CXX_FLAGS = $(C_FLAGS) -std=gnu++2a
+CXX_FLAGS = $(C_FLAGS) -std=gnu++2b
 AR = ar
 
 YUE_TAG = $(shell $(LUA) utility.lua version "YUE_VERSION=$(YUE_VERSION)" "DL=$(CURL)" "OS=$(OS)")
