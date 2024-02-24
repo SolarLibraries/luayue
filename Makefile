@@ -15,6 +15,10 @@ LUA_INCDIR=/usr/local/include
 
 INCLUDES = -I$(LUA_INCDIR)
 
+ifndef OS
+	OS=windows
+endif
+
 ifeq ($(OS), darwin)
 	RM=rm -rf
 	DL = $(CURL) -fL
@@ -32,7 +36,7 @@ endif
 	INCLUDES += -I/usr/local/include
 	LD_FLAGS += -L/usr/local/lib
 
-	LIBYUE=yue.so
+	LIBYUE = yue.so
 else ifeq ($(OS), windows)
 	RM=del /f /q
 	DL = C:\\windows\\system32\\curl.exe -fL
@@ -92,10 +96,17 @@ yue-git/lua_yue/lua_yue.a: yue-git/ yue/
 	$(MAKE) -f ../../LuaYue.mk CC="$(CC)" CXX="$(CXX)" CFLAGS="$(C_FLAGS)" CXXFLAGS="$(CXX_FLAGS)" INCDIRS="$(INCLUDES)" OS="$(OS)" -C yue-git/lua_yue/
 
 download-bin:
-	$(LUA) utility.lua download "YUE_VERSION=$(YUE_VERSION)" "OS=$(OS)" "UNZIP=$(UNZIP)"
+	$(LUA) utility.lua download "YUE_VERSION=$(YUE_VERSION)" "OS=$(OS)" "UNZIP=$(UNZIP)" "TAR=$(TAR)"
 
 install-bin:
-	cp $(LIBYUE) $(INST_LIBDIR)/$(LIBYUE)
+ifeq ($(OS),windows)
+	if not exist "$(INST_LIBDIR)" mkdir "$(INST_LIBDIR)"
+	copy "yue-bin\$(LIBYUE)" "$(INST_LIBDIR)\$(LIBYUE)"
+else
+	mkdir -p $(INST_LIBDIR)
+	cp yue-bin/$(LIBYUE) $(INST_LIBDIR)/$(LIBYUE)
+endif
+
 
 install: $(LIBYUE)
 	cp $(LIBYUE) $(INST_LIBDIR)/$(LIBYUE)

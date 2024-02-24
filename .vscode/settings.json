@@ -1,9 +1,6 @@
 {
     "Lua.workspace.library": [
-        "/usr/local/share/lua/5.4/",
-        "/usr/local/share/lua/5.1/",
-        "/usr/local/lib/lua/5.1/",
-        "/Users/frityet/Library/Application Support/Code/User/globalStorage/sumneko.lua/addonManager/addons/yue/module/library"
+        // "lua_modules/"
     ],
-    "Lua.workspace.checkThirdParty": false
+    "Lua.workspace.checkThirdParty": false,
 }

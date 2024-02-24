@@ -1,10 +1,10 @@
 local json = require("json")
-local tabular = require("tabular")
+local pprint = require("pprint")
 
 local function print(...)
     for _, v in ipairs({...}) do
         if type(v) == "table" then
-            print(tabular(v))
+            pprint(v)
         else
             io.stderr:write(tostring(v), "\n")
         end
@@ -53,7 +53,8 @@ if env.YUE_VERSION ~= "latest" then env.YUE_VERSION = "v"..env.YUE_VERSION end
 
 ---@type "win" | "linux" | "mac"
 local osname = env.OS
-osname = osname == "darwin" and "mac" or osname
+-- osname = osname == "darwin" and "mac" or osname
+if osname == "darwin" then osname = "mac" elseif osname == "windows" then osname = "win" end
 
 ---@param cmd string
 ---@param ... string
@@ -64,7 +65,8 @@ local function execute(cmd, ...)
     local f, err = io.popen(cmd, "r")
     if not f then return nil, err, cmd end
     local body = f:read("*a")
-    f:close()
+    local ok, err, code = f:close()
+    if not ok then return nil, err end
     return body
 end
 
@@ -72,8 +74,9 @@ end
 ---Cross platform GET
 ---@param url string
 ---@param headers table<string, string>?
+---@param to string?
 ---@return string? body, string? error, string? command
-local function get(url, headers)
+local function get(url, headers, to)
     local is_wget = false
     local exe = env.DL
     if exe == nil or exe == "" then
@@ -94,11 +97,13 @@ local function get(url, headers)
         for k, v in pairs(headers) do
             cmd = cmd.." --header \""..k..": "..v.."\""
         end
+        if to then cmd = cmd.." -o "..to end
     else
         cmd = exe.." -L "..url
         for k, v in pairs(headers) do
             cmd = cmd.." -H \""..k..": "..v.."\""
         end
+        if to then cmd = cmd.." -o "..to end
     end
 
     return execute(cmd)
@@ -109,15 +114,18 @@ end
 ---@param to string
 ---@return boolean success, string? error, string? command
 local function download(url, to)
-    local body, err, cmd = get(url)
-    if not body then return false, err, cmd end
-
-    local f = io.open(to, "w+b")
-    if not f then return false, "Failed to open file "..to.." for writing" end
-    f:write(body)
-    f:close()
-
+    local ok, err, cmd = get(url, nil, to) 
+    if not ok then return false, err, cmd end
     return true
+    -- local body, err, cmd = get(url)
+    -- if not body then return false, err, cmd end
+
+    -- local f = io.open(to, "w+b")
+    -- if not f then return false, "Failed to open file "..to.." for writing" end
+    -- f:write(body)
+    -- f:close()
+
+    -- return true
 end
 
 ---@param file string Archive to unzip
@@ -125,12 +133,8 @@ end
 ---@return boolean success, string? error, string? command
 local function unzip(file, to)
     to = to or "./"
-    local tar = env.TAR
-    if not tar then tar = "tar" end
-
-    -- local cmd = tar.." -xzvf "..file.." -C "..to
-    -- print("$ "..cmd)
-    -- local ok = os.execute(cmd)
+    execute("mkdir", to)
+    local tar = env.TAR or "tar"
     local ok, err, cmd = execute(tar, "-xzvf", file, "-C", to)
     if not ok then return false, err, cmd end
 
@@ -189,14 +193,14 @@ local commands = {
         end
 
 
-        ---@type string
+        ---@type any
         local asset do
             for _, a in ipairs(release.assets) do
                 local s = string.format("lua_yue_lua_%s_%s_%s_%s.zip", LUA_VERSION, env.YUE_VERSION, osname, os.arch)
                 print("Checking "..a.name.." against "..s)
                 local ok = a.name:match(s)
                 if ok then
-                    asset = a --[[@as string]]
+                    asset = a
                     break
                 end
             end
@@ -204,11 +208,17 @@ local commands = {
 
         if not asset then
             error("Failed to find asset")
-         end
+        end
 
         assert(download(asset.browser_download_url, asset.name))
 
-        assert(unzip(asset.name))
+        -- if osname == "win" then
+        --     execute("rmdir", "/S", "yue-bin")
+        -- else
+        --     execute("rm", "-r", "yue-bin")
+        -- end
+        execute("rmdir", osname == "win" and "/S /Q" or "--ignore-fail-on-non-empty", "yue-bin")
+        assert(unzip(asset.name, "yue-bin"))
     end;
 
     install = function (args)
@@ -260,6 +270,20 @@ local commands = {
         output(asset.browser_download_url)
     end;
 }
+
+-- if osname == "windows" then
+--     return require("download-bin-windows")(
+--         env.YUE_VERSION,
+--         LUA_VERSION,
+--         releases,
+--         {
+--             copy = copy,
+--             execute = execute,
+--             download = download,
+--             get = get
+--         }
+--     )
+-- end
 
 --all non KEY=VALUE args are passed to the command
 local args = {}

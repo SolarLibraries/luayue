@@ -47,7 +47,10 @@ luac.out
 yue.zip
 yue/
 yue-git/
+yue-bin/
 
 test/
 
 .env
+/luarocks.bat
+/lua.bat
